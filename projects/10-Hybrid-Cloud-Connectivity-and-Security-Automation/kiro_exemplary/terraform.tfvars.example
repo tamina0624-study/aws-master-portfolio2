@@ -1,0 +1,30 @@
+# =============================================================================
+# terraform.tfvars.example
+# このファイルをコピーして terraform.tfvars として使用してください
+# =============================================================================
+
+region      = "us-east-1"
+environment = "prod"
+owner       = "your-name"
+
+# VPC
+prod_vpc_cidr       = "10.0.0.0/16"
+prod_public_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
+prod_private_subnets = ["10.0.11.0/24", "10.0.12.0/24"]
+
+onprem_vpc_cidr       = "10.1.0.0/16"
+onprem_public_subnets = ["10.1.1.0/24", "10.1.2.0/24"]
+onprem_private_subnets = ["10.1.3.0/24", "10.1.4.0/24"]
+
+azs = ["us-east-1a", "us-east-1b"]
+
+# VPN
+aws_bgp_asn    = 65000
+onprem_bgp_asn = 65001
+
+# RDS
+rds_master_username        = "admin"
+rds_password_ssm_parameter = "/hcsa/rds/master_password"
+
+# EC2
+key_name = "id_rsa_aws"

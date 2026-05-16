@@ -1,3 +1,4 @@
+exclude: (^|/)projects/12-mask-app/mask-app/(CustomDictionary|Dashboard|DetectionRules)/app\.js$
 repos:
   # =========================
   # ■ Secret Detection (最重要)
@@ -6,6 +7,7 @@ repos:
     rev: v8.18.0
     hooks:
       - id: gitleaks
+        exclude: (^|/)projects/12-mask-app/mask-app/(CustomDictionary|Dashboard|DetectionRules)/app\.js$
         args: ["--verbose", "--redact"]
 
   # =========================

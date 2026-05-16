@@ -1,6 +1,7 @@
 # AWS & Kubernetes Master Portfolio
 
-このプロジェクトは、AWS上にTerraformを用いて堅牢なインフラを構築し、Kubernetesを利用してスケーラブルなNginxサーバーを運用するポートフォリオです。
+このプロジェクトは、AWS上にTerraformを用いて堅牢なインフラを構築し、
+Kubernetesを利用してスケーラブルなNginxサーバーを運用するポートフォリオです。
 
 ## 🏗 システム構成図
 graph TD

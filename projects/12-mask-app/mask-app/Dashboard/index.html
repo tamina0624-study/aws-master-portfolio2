@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <!-- Font Awesome for sidebar icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Font Awesome for sidebar icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>機密情報マスクツール / Secret Mask Tool</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+
+
+
+  <!-- サイドメニュー開閉時の背景 -->
+  <div class="sidebar-bg" id="sidebarBg" onclick="closeSidebar()" style="display:none;"></div>
+
+  <!-- サイドメニューボタン（アイコン表示） main直下用 -->
+  <!-- CustomDictionaryと同じ見栄えに統一 -->
+
+
+  <div class="layout">
+
+    <aside class="sidebar">
+
+      <div class="logo">
+
+        <div class="logo-icon">
+          S
+        </div>
+
+        <div class="logo-text">
+          <h1>機密情報マスクツール</h1>
+          <p>ローカル機密情報保護 / Local Privacy Protection</p>
+        </div>
+
+      </div>
+
+      <div class="menu">
+
+        <div class="menu-item active" onclick="moveToDashboard()">
+          ダッシュボード / Dashboard
+        </div>
+
+        <div class="menu-item" onclick="moveToDetectionRule()">
+          検知ルール / Detection Rules
+        </div>
+        <div class="menu-item" onclick="moveToCustomDictionary()">
+          カスタム辞書 / Custom Dictionary
+        </div>
+
+
+      </div>
+
+      <div class="local-card">
+
+        <h3>
+          ✓ ローカル処理専用モード / Local Only Mode
+        </h3>
+
+        <ul>
+          <li>外部アップロードなし / No External Upload</li>
+          <li>ブラウザ内のみで処理 / Browser-only Processing</li>
+          <li>オフライン対応 / Offline Compatible</li>
+          <li>ローカル辞書対応 / Custom Local Dictionary</li>
+        </ul>
+
+      </div>
+
+    </aside>
+
+    <main class="main">
+        <!-- サイドメニューボタン（アイコン表示） main直下用 -->
+        <button class="hamburger" id="hamburgerMenu" onclick="toggleSidebar()" aria-label="メニューを開く" style="border:none;">
+          <i class="fas fa-bars" style="font-size:2rem;color:white;"></i>
+        </button>
+
+      <div class="topbar">
+
+        <div class="title">
+          <h2>機密情報検知ワークスペース / Secret Detection Workspace</h2>
+          <p>
+            共有前に機密情報を検知・マスクします / Detect and mask sensitive information before sharing.
+          </p>
+        </div>
+
+        <div class="risk">
+          <div>
+            リスクレベル / Risk Level
+          </div>
+
+          <div class="risk-score">
+            LOW
+          </div>
+        </div>
+
+      </div>
+
+      <div class="cards">
+
+        <div class="stat-card">
+          <div class="label">検知数 / Secrets Found</div>
+          <div class="value">0</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="label">メールアドレス / Emails</div>
+          <div class="value">0</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="label">APIキー / API Keys</div>
+          <div class="value">0</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="label">カスタムルール / Custom Rules</div>
+          <div class="value">0</div>
+        </div>
+
+      </div>
+
+      <div class="workspace">
+
+        <section class="editor">
+
+          <div class="editor-header">
+
+            <div class="editor-title">
+              入力ログ / Input Logs
+            </div>
+
+          </div>
+
+          <textarea id="inputText" placeholder="ログ・設定・スタックトレース・APIレスポンス等を貼り付け..."></textarea>
+
+          <div class="bottom-bar">
+
+            <div class="actions">
+
+              <button id="clearButton" class="secondary">
+                クリア / Clear
+              </button>
+
+              <button id="maskButton" class="primary">
+                機密情報をマスク / Mask Secrets
+              </button>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <section class="editor">
+
+          <div class="editor-header">
+
+            <div class="editor-title">
+              マスク後テキスト / Sanitized Output
+            </div>
+
+          </div>
+
+          <textarea id="outputText" placeholder="マスク済みテキストがここに表示されます..." readonly></textarea>
+
+          <div class="bottom-bar">
+
+            <div class="detections">
+
+              <div class="detection success">
+                0件をマスク済み / 0 items masked
+              </div>
+
+            </div>
+
+            <div class="actions">
+
+              <button class="secondary" onclick="exportOutput()">
+                エクスポート / Export
+              </button>
+
+              <button id="copyButton" class="primary">
+                コピー / Copy Output
+              </button>
+
+            </div>
+
+          </div>
+
+        </section>
+    </main>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+<script>
+  function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const bg = document.getElementById('sidebarBg');
+    const body = document.body;
+    if (sidebar.classList.contains('open')) {
+      sidebar.classList.remove('open');
+      bg.style.display = 'none';
+      body.classList.remove('sidebar-open');
+    } else {
+      sidebar.classList.add('open');
+      bg.style.display = 'block';
+      body.classList.add('sidebar-open');
+    }
+  }
+  function closeSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const bg = document.getElementById('sidebarBg');
+    document.body.classList.remove('sidebar-open');
+    sidebar.classList.remove('open');
+    bg.style.display = 'none';
+  }
+  // 画面リサイズ時に自動で閉じる
+  window.addEventListener('resize', function() {
+    if(window.innerWidth > 600) {
+      closeSidebar();
+    }
+  });
+</script>
+</html>

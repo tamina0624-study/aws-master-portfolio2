@@ -119,3 +119,7 @@ commit.bat
 
 02-kubernetes-basic/
 swanctl_setting
+.gitignore
+package-lock.json
+favicon.svg
+vite.svg

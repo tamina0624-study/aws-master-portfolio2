@@ -1,0 +1,71 @@
+# k8s/app-deploy.yaml
+
+# --- 1. Deployment (Podの管理) ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 11-react-app
+  namespace: default
+spec:
+  replicas: 2 # 設計通り2台構成
+  selector:
+    matchLabels:
+      app: react-app
+  template:
+    metadata:
+      labels:
+        app: react-app
+    spec:
+      containers:
+      - name: react-app
+        image: 638892640336.dkr.ecr.us-east-2.amazonaws.com/11-react-app:latest # ここを書き換えてください
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+
+---
+# --- 2. Service (内部負荷分散) ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dev-11-react-app-service
+  namespace: default
+spec:
+  type: NodePort # ALB Controllerを使う場合はNodePortまたはIP
+  selector:
+    app: react-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+
+---
+# --- 3. Ingress (ALBの自動作成) ---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dev-11-react-app-ingress
+  namespace: default
+  annotations:
+    # ここでAWS Load Balancer Controllerに命令を出します
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: dev-11-react-app-service
+                port:
+                  number: 80
