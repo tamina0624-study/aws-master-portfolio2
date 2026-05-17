@@ -1,10 +1,11 @@
-
 import argparse
 import subprocess
 import sys
 import re
 import yaml
 import os
+import tomllib
+from pathlib import Path
 
 def load_keywords_section(filepath, section):
     try:
@@ -16,6 +17,9 @@ def load_keywords_section(filepath, section):
         return []
 
 def check_diff_keywords(section, log_prefix, match_line=True, name_only=False):
+    ignorefiles=getallowfilepaths()
+
+    print(ignorefiles)
     keywords = load_keywords_section("projects/00-Secret/keywords.txt", section)
     if not keywords:
         return False
@@ -51,11 +55,12 @@ def check_diff_keywords(section, log_prefix, match_line=True, name_only=False):
                         content = line[1:]
                         key = (current_file, current_line, content.strip())
                         for pattern in patterns:
-                            if pattern.search(content) and key not in already_reported:
-                                f.write(f"{log_prefix} in {current_file} at line {current_line}: {content.strip()}\n")
-                                found = True
-                                already_reported.add(key)
-                                break
+                            if current_file not in ignorefiles:
+                                if pattern.search(content) and key not in already_reported:
+                                    f.write(f"{log_prefix} in {current_file} at line {current_line}: {content.strip()}\n")
+                                    found = True
+                                    already_reported.add(key)
+                                    break
     except Exception as e:
         print(f"[INFO] ログファイルに書き込めませんでした: {e}")
     return found
@@ -101,6 +106,7 @@ def main():
     parser.add_argument('--mode', required=True, help='チェックするセクション名')
     args, unknown = parser.parse_known_args()
     mode = args.mode
+
     found = False
     if mode == 'company':
         found = check_diff_keywords('company', 'ERROR: Company detected')
@@ -121,6 +127,24 @@ def main():
         sys.exit(1)
     if found:
         sys.exit(1)
+
+
+
+def getallowfilepaths():
+    config_path = Path(".gitleaks.toml")
+
+    with open(config_path, "rb") as f:
+        config = tomllib.load(f)
+
+    filelist = config.get("allowlist", {}).get("paths", [])
+
+    filelist = [
+        file.replace("\\", "")
+        for file in filelist
+    ]
+
+    return filelist
+
 
 if __name__ == "__main__":
     main()

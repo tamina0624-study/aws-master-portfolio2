@@ -7,13 +7,34 @@ git status
 git add .
 
 # 3. 修正内容をメモ（コミット）
-git commit -m "ハイブリッド・クラウド接続とセキュリティ自動化　初期構築その3"
+git commit -m "機密情報のマスクツール-react版追加"
 
 # 4. GitHubに送信
 git push origin main
 
 #commitを取り消す
 git reset --soft HEAD~1
+
+#git index 修正
+git rm --cached -r .
+
+#git logの削除
+ git log --all -- path/to/file
+
+ #キャッシュ削除
+ Remove-Item -Recurse -Force $HOME\.cache\pre-commit
+
+#git index 修正
+git rm --cached -r .
+
+#git logの削除
+ git log --all -- path/to/file
+
+ #キャッシュ削除
+ Remove-Item -Recurse -Force $HOME\.cache\pre-commit
+
+#pre-commitのログ確認
+py -m pre_commit run --all-files -v 2>&1 | Tee-Object -FilePath precommit.log
 
 git reset --soft f2efd37d71ee751e8efb05917a619d64c23873d1
 

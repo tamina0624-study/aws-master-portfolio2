@@ -3,12 +3,14 @@ repos:
   # =========================
   # ■ Secret Detection (最重要)
   # =========================
-  - repo: https://github.com/zricethezav/gitleaks
-    rev: v8.18.0
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.24.2
     hooks:
       - id: gitleaks
-        exclude: (^|/)projects/12-mask-app/mask-app/(CustomDictionary|Dashboard|DetectionRules)/app\.js$
-        args: ["--verbose", "--redact"]
+        args:
+          - "--verbose"
+          - "--redact"
+          - "--config=.gitleaks.toml"
 
   # =========================
   # ■ Basic Safety Checks

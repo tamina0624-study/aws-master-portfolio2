@@ -1,0 +1,21 @@
+C:\Temp\mask-app\react\ 配下の主なファイル・ディレクトリの役割を説明します。
+
+- unified-mask-app/
+  - package.json: プロジェクトの依存関係やスクリプト、メタ情報を管理するファイルです。
+  - README.md: プロジェクトの概要や使い方などの説明が書かれています。
+  - public/
+    - index.html: ReactアプリのHTMLテンプレート。アプリのルートとなるHTMLです。
+    - manifest.json, robots.txt: PWAやSEO関連の設定ファイルです。
+  - src/
+    - App.tsx: アプリ全体のルートコンポーネント。画面構成の中心です。
+    - App.css: App.tsx用のスタイルシート。
+    - index.tsx: Reactアプリのエントリーポイント。App.tsxをHTMLにマウントします。
+    - index.css: 全体に適用されるスタイルシート。
+    - reportWebVitals.ts: パフォーマンス計測用のファイル。
+    - service-worker.ts, serviceWorkerRegistration.ts: PWA（プログレッシブウェブアプリ）対応のためのサービスワーカー関連ファイル。
+    - setupTests.ts: テスト環境のセットアップ用ファイル。
+    - features/
+      - CustomDictionary/, Dashboard/, DetectionRules/: 各機能ごとのディレクトリ。機能ごとにコンポーネント（.tsx）とスタイル（.css）が分かれています。
+        - 例: CustomDictionary.tsx（機能のUI/ロジック）、CustomDictionary.css（そのスタイル）
+
+この構成は、Reactの標準的なプロジェクト構成で、機能ごとにコンポーネントを分離し、保守性・拡張性を高めています。詳細な役割や内容が知りたいファイルがあれば教えてください。
